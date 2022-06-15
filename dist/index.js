@@ -85,10 +85,9 @@ class GithubHelper {
             //  - "Pull request is in unstable status"
             //  - "Pull request is in clean status"
             do {
-                core.debug(`I am indeed attempting. current_attmpt=${attempts}`);
                 if (attempts > 0) {
-                    core.debug(`Sleeping 5000ms before next attempt. current_attempt=${attempts}`);
-                    yield sleep(5000);
+                    core.debug(`Sleeping 30000ms before next attempt. current_attempt=${attempts}`);
+                    yield sleep(30000);
                 }
                 const params = {
                     pullRequestId: pullRequestId,
@@ -111,15 +110,13 @@ class GithubHelper {
       }`;
                 try {
                     const response = yield this.octokit.graphql(query, params);
-                    core.debug("I got response!");
                     return response.enablePullRequestAutoMerge.pullRequest.autoMergeRequest;
                 }
                 catch (e) {
                     core.warning(e instanceof Error ? e : e + '');
                     continue;
                 }
-            } while (++attempts < 5);
-            core.debug("oh noes");
+            } while (++attempts < 3);
             throw new Error('Failed to enable pull request automerge.');
         });
     }
