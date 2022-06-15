@@ -65,6 +65,9 @@ export class GithubHelper {
     //  - "Pull request is in clean status"
     do {
       if (attempts > 0) {
+        core.debug(
+          `Sleeping 5000ms before next attempt. current_attempt=${attempts}`
+        )
         await sleep(5_000)
       }
       const params: OctokitTypes.RequestParameters = {
